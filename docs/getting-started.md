@@ -1,85 +1,129 @@
 # Getting Started
 
-Tailwind CSS hoạt động bằng cách quét tất cả các tệp HTML, thành phần JavaScript và bất kỳ mẫu nào khác để tìm tên lớp, tạo kiểu tương ứng rồi ghi chúng vào tệp CSS tĩnh.
+## Installation
 
-Nó nhanh, linh hoạt và đáng tin cậy — không có thời gian chạy.
+### Using React
 
-## I. Tailwind CLI
+- **`1. Create your project`**
 
-Cách đơn giản và nhanh nhất để thiết lập và chạy Tailwind CSS từ đầu là sử dụng công cụ Tailwind CLI. CLI cũng có sẵn dưới dạng tệp [thực thi độc lập](https://tailwindcss.com/blog/standalone-cli) nếu bạn muốn sử dụng nó mà không cần cài đặt Node.js.
+  Bắt đầu bằng cách tạo một dự án Vite mới nếu bạn chưa thiết lập dự án nào. Cách tiếp cận phổ biến nhất là sử dụng [Create Vite](https://vite.dev/guide/#scaffolding-your-first-vite-project).
 
-`1`. **Install Tailwind CSS**
+  ```sh
+  > npm create vite@latest my-project -- --template react
+  > cd my-project
+  ```
 
-Cài đặt `tailwindcss` qua npm và tạo tệp `tailwind.config.js` của bạn.
+- **`2. Install Tailwind CSS`**
+
+  Cài đặt `tailwindcss` và các phần phụ thuộc ngang hàng của nó, sau đó tạo các tệp `tailwind.config.js` và `postcss.config.js`.
+
+  ```sh
+  > npm install -D tailwindcss postcss autoprefixer
+  > npx tailwindcss init -p
+  ```
+
+- **`3. Configure your template paths`**
+
+  Thêm đường dẫn đến tất cả các tệp mẫu trong tệp `tailwind.config.js` của bạn.
+
+  ```js
+  // tailwind.config.js
+
+  /** @type {import('tailwindcss').Config} */
+  export default {
+    content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    theme: {
+      extend: {},
+    },
+    plugins: [],
+  };
+  ```
+
+- **`4. Add the Tailwind directives to your CSS`**
+
+  Thêm lệnh `@tailwind` cho từng lớp của Tailwind vào tệp `./src/index.css` của bạn.
+
+  ```css
+  <!-- src/index.css -->
+
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  ```
+
+- **`5. Start your build process`**
+
+  Chạy quá trình xây dựng của bạn với `npm run dev`.
+
+  ```sh
+  > npm run dev
+  ```
+
+- **`6. Start using Tailwind in your project`**
+  Bắt đầu sử dụng các lớp tiện ích của Tailwind để tạo kiểu cho nội dung của bạn.
+
+  ```js
+  <!-- App.js -->
+
+  export default function App() {
+    return <h1 className='text-3xl font-bold underline'>Hello world!</h1>;
+  }
+  ```
+
+### Other Install
+
+> Tham khảo: <https://tailwindcss.com/docs/installation>
+
+## Editor Setup
+
+### [IntelliSense for VS Code](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+
+### Automatic class sorting with Prettier
+
+Để bắt đầu, hãy cài đặt `prettier-plugin-tailwindcss` làm phần phụ thuộc vào nhà phát triển:
 
 ```sh
-> npm install -D tailwindcss
-> npx tailwindcss init
+> npm install -D prettier prettier-plugin-tailwindcss
 ```
 
-`2`. **Configure your template paths**
-
-Thêm đường dẫn đến tất cả các tệp mẫu trong tệp `tailwind.config.js` của bạn.
+Sau đó thêm plugin vào Prettier configuration
 
 ```js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./src/**/*.{html,js}'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
+// .prettierrc
+{
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
 ```
 
-`3`. **Add the Tailwind directives to your CSS**
+## Using with Preprocessors
 
-Thêm chỉ thị `@tailwind` cho từng lớp của Tailwind vào tệp CSS chính của bạn (`src/index.css`).
+> Tham khảo: <https://tailwindcss.com/docs/using-with-preprocessors>
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+- Using PostCSS as your preprocessor
+  - Build-time imports
+  - Nesting
+  - Variables
+  - Vendor prefixes
+- Using Sass, Less, or Stylus
+  - Sass
+  - Stylus
 
-`4`. **Start the Tailwind CLI build process**
+## Optimizing for Production
 
-Chạy công cụ CLI để quét các tệp mẫu của bạn để tìm lớp và xây dựng CSS của bạn.
+Nếu đang sử dụng Tailwind CLI, bạn có thể giảm thiểu CSS bằng cách thêm cờ `--minify`:
 
 ```sh
-npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
+npx tailwindcss -o build.css --minify
 ```
 
-`4`. **Start using Tailwind in your HTML**
+Nếu bạn đã cài đặt Tailwind làm plugin PostCSS, hãy thêm `cssnano` vào cuối danh sách plugin của bạn:
 
-Thêm tệp CSS đã biên dịch của bạn vào `<head>` và bắt đầu sử dụng các lớp tiện ích của Tailwind để tạo kiểu cho nội dung của bạn.
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./output.css" rel="stylesheet" />
-  </head>
-  <body>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
-  </body>
-</html>
+```js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+    ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
+  },
+};
 ```
-
-## II. Using PostCSS
-
-Cài đặt Tailwind CSS làm plugin PostCSS là cách liền mạch nhất để tích hợp nó với các công cụ xây dựng như webpack, Rollup, Vite và Parcel.
-
-> Tham khảo: <https://tailwindcss.com/docs/installation/using-postcss>
-
-## III. Framework Guides
-
-Hướng dẫn dành riêng cho khung bao gồm phương pháp được đề xuất của chúng tôi để cài đặt CSS Tailwind trong một số môi trường phổ biến.
-
-> Tham khảo: <https://tailwindcss.com/docs/installation/framework-guides>
-
-## IV. Play CDN
-
-> Tham khảo: <https://tailwindcss.com/docs/installation/play-cdn>
